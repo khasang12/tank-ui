@@ -25,6 +25,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     create(): void {
+        this.registry.set('score', 0)
         // create tilemap from tiled JSON
         this.map = this.make.tilemap({ key: 'levelMap' })
 
@@ -92,7 +93,7 @@ export class GameScene extends Phaser.Scene {
             )
         }, this)
 
-        this.cameras.main.startFollow(this.player)
+        this.cameras.main.startFollow(this.player, false, 1, 1, -480, -360)
     }
 
     update(): void {

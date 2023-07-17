@@ -116,9 +116,11 @@ export class Enemy extends Phaser.GameObjects.Image {
 
     public updateHealth(): void {
         if (this.health > 0) {
+            this.scene.events.emit('scoreChanged', 5)
             this.health -= 0.05
             this.redrawLifebar()
         } else {
+            this.scene.events.emit('scoreChanged', 20)
             this.health = 0
             this.active = false
         }
