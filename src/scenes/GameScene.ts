@@ -2,6 +2,7 @@ import { Player } from '../objects/player'
 import { Enemy } from '../objects/enemy'
 import { Obstacle } from '../objects/obstacles/obstacle'
 import { Bullet } from '../objects/bullet'
+import { gameManager } from '../game'
 
 export class GameScene extends Phaser.Scene {
     private map: Phaser.Tilemaps.Tilemap
@@ -25,7 +26,14 @@ export class GameScene extends Phaser.Scene {
     }
 
     create(): void {
-        this.registry.set('score', 0)
+        this.cameras.main.fadeIn(500, 0, 0, 0)
+
+        gameManager.soundManager.addSound('beam', this.sound.add('beam'))
+        gameManager.soundManager.addSound('explosion', this.sound.add('explosion'))
+        gameManager.soundManager.addSound('pickup', this.sound.add('pickup'))
+        gameManager.soundManager.addSound('death', this.sound.add('death'))
+        this.events.emit('resetScore')
+
         // create tilemap from tiled JSON
         this.map = this.make.tilemap({ key: 'levelMap' })
 
@@ -159,6 +167,17 @@ export class GameScene extends Phaser.Scene {
     private enemyBulletHitPlayer(bullet: Bullet, player: Player): void {
         bullet.destroy()
         player.updateHealth()
+        if (player.active == false) {
+            // Scene Transition
+            this.events.emit('gameover')
+            this.cameras.main.fadeOut(1000, 0, 0, 0)
+            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+                this.time.delayedCall(1000, () => {
+                    this.scene.moveDown('HUDScene')
+                    this.scene.start('GameOverScene')
+                })
+            })
+        }
     }
 
     private playerBulletHitEnemy(bullet: Bullet, enemy: Enemy): void {

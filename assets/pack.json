@@ -111,6 +111,26 @@
                 "type": "image",
                 "key": "sound-off",
                 "url": "./assets/buttons/sound-off.png"
+            },
+            {
+                "type": "audio",
+                "key": "beam",
+                "url": "./assets/audio/beam.mp3"
+            },
+            {
+                "type": "audio",
+                "key": "pickup",
+                "url": "./assets/audio/pickup.wav"
+            },
+            {
+                "type": "audio",
+                "key": "explosion",
+                "url": "./assets/audio/explosion.mp3"
+            },
+            {
+                "type": "audio",
+                "key": "death",
+                "url": "./assets/audio/death.mp3"
             }
         ]
     }

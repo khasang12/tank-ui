@@ -18,6 +18,11 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
     input: {
         keyboard: true,
     },
+    scale: {
+        parent: 'phaser-game',
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+    },
     physics: {
         default: 'arcade',
         arcade: {

@@ -14,8 +14,8 @@ export class PauseScene extends Phaser.Scene {
 
     create(): void {
         this.cameras.main.setBackgroundColor('rgba(255,255,255,0.4)')
-        // create events
-        const pauseText = this.add.text(CONST.CANVAS_WIDTH / 2 - 150, 300, 'PAUSED', {
+
+        const pauseText = this.add.text(-150, 0, 'PAUSED', {
             fontSize: '84px',
             color: '#000',
             fontStyle: 'bold',
@@ -23,40 +23,61 @@ export class PauseScene extends Phaser.Scene {
 
         this.resumeButton = new Button({
             scene: this,
-            x: CONST.CANVAS_WIDTH / 2,
-            y: 550,
+            x: 0,
+            y: 250,
             key: 'button',
             text: 'CONTINUE',
             scale: 1.4,
             callback: () => {
                 this.scene.stop('PauseScene')
+                this.scene.resume('HUDScene')
                 this.scene.resume('GameScene')
+                this.events.emit('resume')
             },
         })
 
         this.restartButton = new Button({
             scene: this,
-            x: CONST.CANVAS_WIDTH / 2,
-            y: 650,
+            x: 0,
+            y: 350,
             key: 'button',
             text: 'RESTART',
             scale: 1.4,
             callback: () => {
                 this.scene.stop('PauseScene')
+                this.scene.start('HUDScene')
                 this.scene.start('GameScene')
+                this.events.emit('resume')
             },
         })
 
         this.soundButton = new Button({
             scene: this,
-            x: CONST.CANVAS_WIDTH / 2,
-            y: 750,
-            key: 'sound-on',
+            x: 0,
+            y: 450,
+            key: this.sound.mute ? 'sound-off' : 'sound-on',
             text: '',
             scale: 0.3,
             callback: () => {
-                this.soundButton.setTexture('sound-off')
+                this.handleUpdateSound()
             },
         })
+
+        const container = this.add.container(CONST.CANVAS_WIDTH / 2, 300, [
+            pauseText,
+            this.resumeButton,
+            this.restartButton,
+            this.soundButton,
+        ])
+    }
+
+    private handleUpdateSound() {
+        if (this.sound.mute) {
+            this.sound.mute = false
+            this.soundButton.setTexture('sound-on')
+        } else {
+            this.sound.mute = true
+            this.soundButton.setTexture('sound-off')
+        }
     }
 }

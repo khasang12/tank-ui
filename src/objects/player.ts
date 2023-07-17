@@ -1,5 +1,6 @@
 import { Bullet } from './bullet'
 import { IImageConstructor } from '../interfaces/image.interface'
+import { gameManager } from '../game'
 
 export class Player extends Phaser.GameObjects.Image {
     body: Phaser.Physics.Arcade.Body
@@ -21,6 +22,10 @@ export class Player extends Phaser.GameObjects.Image {
     private rotateKeyLeft: Phaser.Input.Keyboard.Key
     private rotateKeyRight: Phaser.Input.Keyboard.Key
     private shootingKey: Phaser.Input.Keyboard.Key
+    private upKey: Phaser.Input.Keyboard.Key
+    private downKey: Phaser.Input.Keyboard.Key
+    private leftKey: Phaser.Input.Keyboard.Key
+    private rightKey: Phaser.Input.Keyboard.Key
 
     public getBullets(): Phaser.GameObjects.Group {
         return this.bullets
@@ -37,7 +42,7 @@ export class Player extends Phaser.GameObjects.Image {
         // variables
         this.health = 1
         this.lastShoot = 0
-        this.speed = 100
+        this.speed = 200
 
         // image
         this.setOrigin(0.5, 0.5)
@@ -62,8 +67,15 @@ export class Player extends Phaser.GameObjects.Image {
 
         // input
         this.cursors = this.scene.input.keyboard.createCursorKeys()
-        this.rotateKeyLeft = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
-        this.rotateKeyRight = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
+
+        this.upKey = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
+        this.downKey = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)
+        this.leftKey = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
+        this.rightKey = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
+
+        this.rotateKeyLeft = this.cursors.left
+        this.rotateKeyRight = this.cursors.right
+
         this.shootingKey = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
 
         // physics
@@ -88,13 +100,13 @@ export class Player extends Phaser.GameObjects.Image {
     private handleInput() {
         // move tank forward
         // small corrections with (- MATH.PI / 2) to align tank correctly
-        if (this.cursors.up.isDown) {
+        if (this.upKey.isDown) {
             this.scene.physics.velocityFromRotation(
                 this.rotation - Math.PI / 2,
                 this.speed,
                 this.body.velocity
             )
-        } else if (this.cursors.down.isDown) {
+        } else if (this.downKey.isDown) {
             this.scene.physics.velocityFromRotation(
                 this.rotation - Math.PI / 2,
                 -this.speed,
@@ -105,23 +117,26 @@ export class Player extends Phaser.GameObjects.Image {
         }
 
         // rotate tank
-        if (this.cursors.left.isDown) {
-            this.rotation -= 0.02
-        } else if (this.cursors.right.isDown) {
-            this.rotation += 0.02
+        if (this.leftKey.isDown) {
+            this.rotation -= 0.1
+            this.barrel.rotation = this.rotation
+        } else if (this.rightKey.isDown) {
+            this.rotation += 0.1
+            this.barrel.rotation = this.rotation
         }
 
         // rotate barrel
         if (this.rotateKeyLeft.isDown) {
-            this.barrel.rotation -= 0.05
+            this.barrel.rotation -= 0.1
         } else if (this.rotateKeyRight.isDown) {
-            this.barrel.rotation += 0.05
+            this.barrel.rotation += 0.1
         }
     }
 
     private handleShooting(): void {
         if (this.shootingKey.isDown && this.scene.time.now > this.lastShoot) {
             this.scene.cameras.main.shake(20, 0.005)
+            gameManager.soundManager.playSound('beam')
             this.scene.tweens.add({
                 targets: this,
                 props: { alpha: 0.8 },
@@ -163,17 +178,13 @@ export class Player extends Phaser.GameObjects.Image {
 
     public updateHealth(): void {
         if (this.health > 0) {
+            gameManager.soundManager.playSound('pickup')
             this.health -= 0.05
             this.redrawLifebar()
         } else {
+            gameManager.soundManager.playSound('death')
             this.health = 0
             this.active = false
-            this.scene.scene.start('GameOverScene')
         }
-        /* this.health = 0
-        this.active = false
-        this.scene.scene.stop('GameScene')
-        this.scene.scene.stop('HUDScene')
-        this.scene.scene.start('GameOverScene') */
     }
 }

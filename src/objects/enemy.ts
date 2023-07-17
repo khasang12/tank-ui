@@ -1,5 +1,6 @@
 import { Bullet } from './bullet'
 import { IImageConstructor } from '../interfaces/image.interface'
+import { gameManager } from '../game'
 
 export class Enemy extends Phaser.GameObjects.Image {
     body: Phaser.Physics.Arcade.Body
@@ -90,6 +91,7 @@ export class Enemy extends Phaser.GameObjects.Image {
     private handleShooting(): void {
         if (this.scene.time.now > this.lastShoot) {
             if (this.bullets.getLength() < 10) {
+                gameManager.soundManager.playSound('beam')
                 this.bullets.add(
                     new Bullet({
                         scene: this.scene,
@@ -120,7 +122,8 @@ export class Enemy extends Phaser.GameObjects.Image {
             this.health -= 0.05
             this.redrawLifebar()
         } else {
-            this.scene.events.emit('scoreChanged', 20)
+            gameManager.soundManager.playSound('explosion')
+            this.scene.registry.values.tank += 1
             this.health = 0
             this.active = false
         }
