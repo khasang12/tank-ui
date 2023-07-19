@@ -27,7 +27,6 @@ export class HUDScene extends Phaser.Scene {
                 this.pauseButton.setAlpha(0)
             },
         })
-        
 
         // Create a score label and add it to the HUD
         this.scoreLabel = this.add.text(CONST.CANVAS_WIDTH - 300, 30, 'Score: 0', {

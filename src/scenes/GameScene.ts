@@ -105,29 +105,9 @@ export class GameScene extends Phaser.Scene {
 
         this.cameras.main.startFollow(this.player, false, 1, 1, -480, -360)
 
-        //  The miniCam is 400px wide, so can display the whole world at a zoom of 0.2
-        this.minimap = this.cameras
-            .add(CONST.CANVAS_WIDTH - 200, CONST.CANVAS_HEIGHT - 200, 200, 200)
-            .setZoom(0.15)
-            .setName('mini')
-        this.minimap.setBackgroundColor(0x002244)
-        this.minimap
-            .startFollow(this.player, false, 1, 1, -420, -360)
-            .setBackgroundColor('rgba(255,255,0,0.5)')
-
-        this.lights.enable()
-        this.lights.setAmbientColor(0x808080)
-
-        const spotlight = this.lights.addLight(400, 300, 200).setIntensity(3)
-
-        this.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
-            spotlight.x = pointer.x + this.cameras.main.scrollX
-            spotlight.y = pointer.y + this.cameras.main.scrollY
-        })
-        
-        this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
-            spotlight.setColor(0xffffff)
-        })
+        // These functions are added to improve UX
+        this.createMinimap()
+        this.createSpotlight()
     }
 
     update(): void {
@@ -146,6 +126,29 @@ export class GameScene extends Phaser.Scene {
                 enemy.getBarrel().angle = (angle + Math.PI / 2) * Phaser.Math.RAD_TO_DEG
             }
         }, this)
+    }
+
+    private createMinimap(): void {
+        this.minimap = this.cameras
+            .add(CONST.CANVAS_WIDTH - 200, CONST.CANVAS_HEIGHT - 200, 200, 200)
+            .setZoom(0.15)
+            .setName('mini')
+        this.minimap.setBackgroundColor(0x002244)
+        this.minimap
+            .startFollow(this.player, false, 1, 1, -420, -360)
+            .setBackgroundColor('rgba(255,255,0,0.5)')
+    }
+
+    private createSpotlight(): void {
+        this.lights.enable()
+        this.lights.setAmbientColor(0x808080)
+
+        const spotlight = this.lights.addLight(400, 300, 200).setIntensity(3).setColor(0xffffff)
+
+        this.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
+            spotlight.x = pointer.x + this.cameras.main.scrollX
+            spotlight.y = pointer.y + this.cameras.main.scrollY
+        })
     }
 
     private convertObjects(): void {
@@ -186,7 +189,7 @@ export class GameScene extends Phaser.Scene {
         bullet.destroy()
     }
 
-    private bulletHitObstacles(bullet: Bullet, obstacle: Obstacle): void {
+    private bulletHitObstacles(bullet: Bullet, _obstacle: Obstacle): void {
         bullet.destroy()
     }
 
@@ -196,6 +199,7 @@ export class GameScene extends Phaser.Scene {
         if (player.active == false) {
             // Scene Transition
             this.events.emit('gameover')
+            this.minimap.setAlpha(0)
             this.cameras.main.fadeOut(1000, 0, 0, 0)
             this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
                 this.time.delayedCall(1000, () => {
