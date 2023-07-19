@@ -102,7 +102,7 @@ export class GameOverScene extends Phaser.Scene {
                 this.scene.bringToTop('HUDScene')
                 this.scene.transition({
                     target: 'GameScene',
-                    duration: 1500,
+                    duration: 1000,
                     moveBelow: true,
                     onUpdate: this.transitionOut,
                 })

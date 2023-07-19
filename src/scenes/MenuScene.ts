@@ -18,9 +18,33 @@ export class MenuScene extends Phaser.Scene {
     create(): void {
         this.cameras.main.setBackgroundColor('rgba(131, 105, 83)')
 
-        this.bitmapTexts.push(this.add.bitmapText(0, 0, 'font', 'TANK', 100))
+        const tankText = this.add
+            .bitmapText(120, 0, 'font', 'TANK', 150)
+            .setAlpha(0)
+            .setScale(3)
+            .setOrigin(0.5, 0.5)
 
-        this.bitmapTexts.push(this.add.bitmapText(10, +120, 'font', 'PRESS S TO PLAY', 30))
+        this.add.tween({
+            targets: tankText,
+            scale: 1,
+            alpha: 1,
+            ease: 'sine.inout',
+            duration: 500,
+            onComplete: () => {
+                this.add.tween({
+                    targets: playText,
+                    x: 10,
+                    y: 120,
+                    alpha: 1,
+                    ease: 'sine.inout',
+                    duration: 500,
+                })
+            },
+        })
+
+        const playText = this.add.bitmapText(10, 1000, 'font', 'PRESS S TO PLAY', 30)
+
+        this.bitmapTexts.push(tankText, playText)
 
         const _container = this.add.container(
             this.sys.canvas.width / 2 - 120,

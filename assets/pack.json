@@ -113,6 +113,11 @@
                 "url": "./assets/buttons/sound-off.png"
             },
             {
+                "type": "image",
+                "key": "reticle",
+                "url": "./assets/sprites/ball.png"
+            },
+            {
                 "type": "audio",
                 "key": "beam",
                 "url": "./assets/audio/beam.mp3"
