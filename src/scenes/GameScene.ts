@@ -3,6 +3,7 @@ import { Enemy } from '../objects/enemy'
 import { Obstacle } from '../objects/obstacles/obstacle'
 import { Bullet } from '../objects/bullet'
 import { gameManager } from '../game'
+import { CONST } from '../constants/const'
 
 export class GameScene extends Phaser.Scene {
     private map: Phaser.Tilemaps.Tilemap
@@ -14,6 +15,7 @@ export class GameScene extends Phaser.Scene {
     private obstacles: Phaser.GameObjects.Group
 
     private target: Phaser.Math.Vector2
+    private minimap: Phaser.Cameras.Scene2D.Camera
 
     constructor() {
         super({
@@ -38,7 +40,7 @@ export class GameScene extends Phaser.Scene {
         this.map = this.make.tilemap({ key: 'levelMap' })
 
         this.tileset = this.map.addTilesetImage('tiles')
-        this.layer = this.map.createLayer('tileLayer', this.tileset, 0, 0)
+        this.layer = this.map.createLayer('tileLayer', this.tileset, 0, 0).setPipeline('Light2D')
         this.layer.setCollisionByProperty({ collide: true })
 
         this.obstacles = this.add.group({
@@ -102,6 +104,30 @@ export class GameScene extends Phaser.Scene {
         }, this)
 
         this.cameras.main.startFollow(this.player, false, 1, 1, -480, -360)
+
+        //  The miniCam is 400px wide, so can display the whole world at a zoom of 0.2
+        this.minimap = this.cameras
+            .add(CONST.CANVAS_WIDTH - 200, CONST.CANVAS_HEIGHT - 200, 200, 200)
+            .setZoom(0.15)
+            .setName('mini')
+        this.minimap.setBackgroundColor(0x002244)
+        this.minimap
+            .startFollow(this.player, false, 1, 1, -420, -360)
+            .setBackgroundColor('rgba(255,255,0,0.5)')
+
+        this.lights.enable()
+        this.lights.setAmbientColor(0x808080)
+
+        const spotlight = this.lights.addLight(400, 300, 200).setIntensity(3)
+
+        this.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
+            spotlight.x = pointer.x + this.cameras.main.scrollX
+            spotlight.y = pointer.y + this.cameras.main.scrollY
+        })
+        
+        this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
+            spotlight.setColor(0xffffff)
+        })
     }
 
     update(): void {

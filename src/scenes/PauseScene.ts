@@ -27,7 +27,7 @@ export class PauseScene extends Phaser.Scene {
             y: 250,
             key: 'button',
             text: 'CONTINUE',
-            scale: 1.4,
+            scale: 1.35,
             callback: () => {
                 this.scene.stop('PauseScene')
                 this.scene.resume('HUDScene')
@@ -42,7 +42,7 @@ export class PauseScene extends Phaser.Scene {
             y: 350,
             key: 'button',
             text: 'RESTART',
-            scale: 1.4,
+            scale: 1.35,
             callback: () => {
                 this.scene.stop('PauseScene')
                 this.scene.start('HUDScene')

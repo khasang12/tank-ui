@@ -2,7 +2,7 @@ import { IButton } from '../../types/button'
 
 export default class Button extends Phaser.GameObjects.Container {
     private button: Phaser.GameObjects.Sprite
-    private text: Phaser.GameObjects.Text
+    private text: Phaser.GameObjects.BitmapText
     private scaleRatio: number
     private callback: () => void
 
@@ -17,12 +17,7 @@ export default class Button extends Phaser.GameObjects.Container {
         this.add(this.button)
 
         // Create the button text and add it to the container
-        this.text = b.scene.add.text(0, 0, b.text, {
-            color: '#ffffff',
-            fontSize: '27px',
-            fontFamily: 'Roboto',
-            fontStyle: 'bold',
-        })
+        this.text = b.scene.add.bitmapText(0, 0, 'font', b.text, 27)
         this.text.setOrigin(0.5)
         this.add(this.text)
 
@@ -57,8 +52,8 @@ export default class Button extends Phaser.GameObjects.Container {
     public onPointerOut() {
         this.button.setAlpha(1)
     }
-    
-    public enableBounce(){
+
+    public enableBounce() {
         this.scene.tweens.add({
             targets: this,
             scale: 0.9,
@@ -69,7 +64,7 @@ export default class Button extends Phaser.GameObjects.Container {
         })
     }
 
-    public setTexture(key: string){
+    public setTexture(key: string) {
         this.button.setTexture(key)
     }
 }

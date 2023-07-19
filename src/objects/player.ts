@@ -118,23 +118,25 @@ export class Player extends Phaser.GameObjects.Image {
 
         // rotate tank
         if (this.leftKey.isDown) {
+            console.log(11)
             this.rotation -= 0.1
-            this.barrel.rotation = this.rotation
         } else if (this.rightKey.isDown) {
             this.rotation += 0.1
-            this.barrel.rotation = this.rotation
         }
 
-        // rotate barrel
-        if (this.rotateKeyLeft.isDown) {
-            this.barrel.rotation -= 0.1
-        } else if (this.rotateKeyRight.isDown) {
-            this.barrel.rotation += 0.1
-        }
+        this.scene.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
+            if (this.scene) {
+                const angle = Phaser.Math.Angle.BetweenPoints(this, {
+                    x: pointer.x + this.scene.cameras.main.scrollX,
+                    y: pointer.y + this.scene.cameras.main.scrollY,
+                })
+                this.barrel.rotation = angle + Math.PI / 2
+            }
+        })
     }
 
     private handleShooting(): void {
-        if (this.shootingKey.isDown && this.scene.time.now > this.lastShoot) {
+        if (this.scene && this.shootingKey.isDown && this.scene.time.now > this.lastShoot) {
             this.scene.cameras.main.shake(20, 0.005)
             gameManager.soundManager.playSound('beam')
             this.scene.tweens.add({

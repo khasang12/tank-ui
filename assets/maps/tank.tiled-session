@@ -1,13 +1,30 @@
 {
-    "activeFile": "",
+    "activeFile": "levelMap.json",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
+        "levelMap.json": {
+            "scale": 0.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 2577,
+                "y": 798
+            }
+        },
+        "levelMap.json#objects": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1
+        },
+        "levelMap.json#tiles": {
+            "scaleInDock": 1
+        }
     },
     "openFiles": [
+        "levelMap.json"
     ],
     "project": "tank.tiled-project",
     "recentFiles": [
+        "levelMap.json"
     ]
 }
