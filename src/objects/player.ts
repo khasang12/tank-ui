@@ -6,6 +6,7 @@ export class Player extends Phaser.GameObjects.Image {
     body: Phaser.Physics.Arcade.Body
 
     // variables
+    private isShooting: boolean
     private health: number
     private lastShoot: number
     private speed: number
@@ -40,6 +41,7 @@ export class Player extends Phaser.GameObjects.Image {
 
     private initImage() {
         // variables
+        this.isShooting = false
         this.health = 1
         this.lastShoot = 0
         this.speed = 200
@@ -90,6 +92,12 @@ export class Player extends Phaser.GameObjects.Image {
             this.lifeBar.y = this.y
             this.handleInput()
             this.handleShooting()
+            this.scene.input.on('pointerdown', () => {
+                this.isShooting = true
+            })
+            this.scene.input.on('pointerup', () => {
+                this.isShooting = false
+            })
         } else {
             this.destroy()
             this.barrel.destroy()
@@ -136,7 +144,7 @@ export class Player extends Phaser.GameObjects.Image {
     }
 
     private handleShooting(): void {
-        if (this.scene && this.shootingKey.isDown && this.scene.time.now > this.lastShoot) {
+        if (this.isShooting && this.scene && this.scene.time.now > this.lastShoot) {
             this.scene.cameras.main.shake(20, 0.005)
             gameManager.soundManager.playSound('beam')
             this.scene.tweens.add({
