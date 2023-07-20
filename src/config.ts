@@ -22,6 +22,8 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
         parent: 'phaser-game',
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
+        width: 1600,
+        height: 1200,
     },
     physics: {
         default: 'arcade',

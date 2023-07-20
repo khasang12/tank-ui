@@ -29,6 +29,7 @@ export class GameScene extends Phaser.Scene {
 
     create(): void {
         this.cameras.main.fadeIn(500, 0, 0, 0)
+        this.cameras.main.setBounds(0, 0, 999999, 999999)
 
         gameManager.soundManager.addSound('beam', this.sound.add('beam'))
         gameManager.soundManager.addSound('explosion', this.sound.add('explosion'))

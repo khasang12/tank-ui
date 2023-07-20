@@ -34,6 +34,15 @@ export class HUDScene extends Phaser.Scene {
             color: '#000',
         })
 
+        Phaser.Actions.AlignTo(
+            [this.pauseButton, this.scoreLabel],
+            Phaser.Display.Align.LEFT_TOP,
+            -CONST.CANVAS_WIDTH + 250,
+            20
+        )
+
+        // Events
+
         const level = this.scene.get('GameScene')
         level.events.on('scoreChanged', (score: number) => {
             const newScore = this.registry.values.score + score

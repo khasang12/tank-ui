@@ -15,7 +15,7 @@ export class PauseScene extends Phaser.Scene {
     create(): void {
         this.cameras.main.setBackgroundColor('rgba(255,255,255,0.4)')
 
-        const pauseText = this.add.text(-150, 0, 'PAUSED', {
+        const pauseText = this.add.text(CONST.CANVAS_WIDTH / 2 - 150, 300, 'PAUSED', {
             fontSize: '84px',
             color: '#000',
             fontStyle: 'bold',
@@ -24,7 +24,7 @@ export class PauseScene extends Phaser.Scene {
         this.resumeButton = new Button({
             scene: this,
             x: 0,
-            y: 250,
+            y: 0,
             key: 'button',
             text: 'CONTINUE',
             scale: 1.35,
@@ -39,7 +39,7 @@ export class PauseScene extends Phaser.Scene {
         this.restartButton = new Button({
             scene: this,
             x: 0,
-            y: 350,
+            y: 0,
             key: 'button',
             text: 'RESTART',
             scale: 1.35,
@@ -54,7 +54,7 @@ export class PauseScene extends Phaser.Scene {
         this.soundButton = new Button({
             scene: this,
             x: 0,
-            y: 450,
+            y: 0,
             key: this.sound.mute ? 'sound-off' : 'sound-on',
             text: '',
             scale: 0.3,
@@ -63,12 +63,14 @@ export class PauseScene extends Phaser.Scene {
             },
         })
 
-        const container = this.add.container(CONST.CANVAS_WIDTH / 2, 300, [
-            pauseText,
-            this.resumeButton,
-            this.restartButton,
-            this.soundButton,
-        ])
+        Phaser.Actions.GridAlign([this.resumeButton, this.restartButton, this.soundButton], {
+            width: 1,
+            height: 4,
+            cellWidth: 150,
+            cellHeight: 150,
+            x: CONST.CANVAS_WIDTH / 2 + 75,
+            y: 550,
+        })
     }
 
     private handleUpdateSound() {
