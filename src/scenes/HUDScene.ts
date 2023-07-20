@@ -27,13 +27,21 @@ export class HUDScene extends Phaser.Scene {
                 this.pauseButton.setAlpha(0)
             },
         })
-        
 
         // Create a score label and add it to the HUD
         this.scoreLabel = this.add.text(CONST.CANVAS_WIDTH - 300, 30, 'Score: 0', {
             fontSize: '44px',
             color: '#000',
         })
+
+        Phaser.Actions.AlignTo(
+            [this.pauseButton, this.scoreLabel],
+            Phaser.Display.Align.LEFT_TOP,
+            -CONST.CANVAS_WIDTH + 250,
+            20
+        )
+
+        // Events
 
         const level = this.scene.get('GameScene')
         level.events.on('scoreChanged', (score: number) => {

@@ -55,9 +55,21 @@ export class MenuScene extends Phaser.Scene {
 
     update(): void {
         if (this.startKey.isDown) {
-            this.scene.start('HUDScene')
-            this.scene.start('GameScene')
-            this.scene.bringToTop('HUDScene')
+            const targetScene = this.scene.get('GameScene') // sleeping
+            const targetCam = targetScene.cameras.main
+            //this.scene.start('GameScene')
+
+            this.scene.transition({
+                target: 'GameScene',
+                sleep: true,
+                duration: 2000,
+                onUpdate: (progress: number) => {
+                    const t = Phaser.Math.Easing.Quadratic.InOut(progress)
+                    this.cameras.main.setViewport(0, 0, (1 - t) * 1600, this.cameras.main.height)
+                    this.cameras.main.setScroll(t * 1600, 0)
+                    targetCam.setViewport((1 - t) * 1600, 0, t * 1600, targetCam.height)
+                },
+            })
         }
     }
 }

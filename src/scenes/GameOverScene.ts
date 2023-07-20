@@ -109,7 +109,7 @@ export class GameOverScene extends Phaser.Scene {
             },
         })
 
-        this.add.container(CONST.CANVAS_WIDTH / 2, 300, [
+        this.add.container(CONST.CANVAS_WIDTH / 2 - 50, 300, [
             gameOverMsg,
             scoreMsg,
             pointText,
