@@ -24,12 +24,13 @@ export class GameScene extends Phaser.Scene {
     }
 
     init(): void {
-        return
+        this.scene.start('HUDScene')
+        this.scene.bringToTop('HUDScene')
     }
 
     create(): void {
         this.cameras.main.fadeIn(500, 0, 0, 0)
-        this.cameras.main.setBounds(0, 0, 999999, 999999)
+        this.cameras.main.setBounds(0, 0, 3200, 2400)
 
         gameManager.soundManager.addSound('beam', this.sound.add('beam'))
         gameManager.soundManager.addSound('explosion', this.sound.add('explosion'))
@@ -134,6 +135,7 @@ export class GameScene extends Phaser.Scene {
             .add(CONST.CANVAS_WIDTH - 200, CONST.CANVAS_HEIGHT - 200, 200, 200)
             .setZoom(0.15)
             .setName('mini')
+            .setBounds(0, 0, 3200, 2400)
         this.minimap.setBackgroundColor(0x002244)
         this.minimap
             .startFollow(this.player, false, 1, 1, -420, -360)

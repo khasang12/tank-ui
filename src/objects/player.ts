@@ -126,7 +126,6 @@ export class Player extends Phaser.GameObjects.Image {
 
         // rotate tank
         if (this.leftKey.isDown) {
-            console.log(11)
             this.rotation -= 0.1
         } else if (this.rightKey.isDown) {
             this.rotation += 0.1
