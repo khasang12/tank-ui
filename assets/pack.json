@@ -14,6 +14,16 @@
             },
             {
                 "type": "image",
+                "key": "tankDemo",
+                "url": "./assets/sprites/tankdemo.png"
+            },
+            {
+                "type": "image",
+                "key": "pixel",
+                "url": "./assets/sprites/16x16.png"
+            },
+            {
+                "type": "image",
                 "key": "tankBlue",
                 "url": "./assets/sprites/tank-blue.png"
             },
